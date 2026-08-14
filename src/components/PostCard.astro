@@ -3,8 +3,8 @@ import { Image } from "astro:assets";
 import { getAuthor, getCategory, formatDate } from "../lib/blog-data.js";
 
 const { post, variant = "default", hidden = false } = Astro.props;
-const author = getAuthor(post.author);
-const category = getCategory(post.category);
+const author = await getAuthor(post.author);
+const category = await getCategory(post.category);
 const searchable = `${post.title} ${post.excerpt}`.toLowerCase();
 const thumbnailIsString = typeof post.thumbnail === "string";
 ---

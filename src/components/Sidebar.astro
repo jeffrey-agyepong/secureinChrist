@@ -2,11 +2,13 @@
 import Icon from "./Icon.astro";
 import PostCard from "./PostCard.astro";
 import Newsletter from "./Newsletter.astro";
-import { categories, tags, popularPosts, sortedPosts, authors } from "../lib/blog-data.js";
+import { getCategories, getTags, popularPosts, sortedPosts, getAuthors } from "../lib/blog-data.js";
 
 const recent = (await sortedPosts()).slice(0, 4);
 const popular = await popularPosts();
-const author = authors[0];
+const categories = await getCategories();
+const tags = await getTags();
+const author = (await getAuthors())[0];
 ---
 
 <aside class="space-y-10">

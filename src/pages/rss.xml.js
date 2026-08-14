@@ -6,9 +6,10 @@ const esc = (value) =>
   value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export async function GET() {
-  const items = (await sortedPosts()).map((post) => {
+  const posts = await sortedPosts();
+  const items = await Promise.all(posts.map(async (post) => {
     const link = `${BASE_URL}/blog/${post.slug}`;
-    const author = getAuthor(post.author);
+    const author = await getAuthor(post.author);
     return [
       "    <item>",
       `      <title>${esc(post.title)}</title>`,
@@ -21,7 +22,7 @@ export async function GET() {
     ]
       .filter(Boolean)
       .join("\n");
-  });
+  }));
 
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',

@@ -1,6 +1,5 @@
-import { getCollection } from "astro:content";
-export { SITE, authors, categories, tags } from "../config/theme.config.ts";
-import { authors, categories, tags } from "../config/theme.config.ts";
+import { getCollection, getEntry } from "astro:content";
+export { SITE } from "../config/theme.config.ts";
 
 const isoDate = (date) => date?.toISOString().slice(0, 10);
 const wordsPerMinute = 220;
@@ -30,9 +29,23 @@ export const posts = async () =>
   (await getCollection("blog", ({ data }) => !data.draft)).map(normalizePost);
 
 export const getPost = async (slug) => (await posts()).find((post) => post.slug === slug);
-export const getAuthor = (slug) => authors.find((author) => author.slug === slug);
-export const getCategory = (slug) => categories.find((category) => category.slug === slug);
-export const getTag = (slug) => tags.find((tag) => tag.slug === slug);
+
+const normalizeTaxonomy = (entry) => ({ slug: entry.id, ...entry.data });
+
+export const getAuthors = async () => (await getCollection("authors")).map(normalizeTaxonomy);
+export const getCategories = async () =>
+  (await getCollection("categories")).map(normalizeTaxonomy);
+export const getTags = async () => (await getCollection("tags")).map(normalizeTaxonomy);
+
+export const getAuthor = async (slug) =>
+  (await getAuthors()).find((author) => author.slug === slug);
+export const getCategory = async (slug) =>
+  (await getCategories()).find((category) => category.slug === slug);
+export const getTag = async (slug) => (await getTags()).find((tag) => tag.slug === slug);
+
+export const getHome = async () => (await getEntry("home", "index")).data;
+export const getAboutEntry = async () => getEntry("about", "index");
+export const getContact = async () => (await getEntry("contact", "index")).data;
 export const postsByCategory = async (slug) =>
   (await sortedPosts()).filter((post) => post.category === slug);
 export const postsByTag = async (slug) =>

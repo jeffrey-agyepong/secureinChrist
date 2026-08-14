@@ -2,9 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import Icon from "../components/Icon.astro";
-import { SITE } from "../lib/blog-data.js";
+import { SITE, getContact } from "../lib/blog-data.js";
 import { CONTACT, FORMS } from "../config/theme.config.ts";
 
+const contact = await getContact();
 const hasContactEndpoint = Boolean(FORMS.contact.action);
 const contactAction = hasContactEndpoint ? FORMS.contact.action : "/contact";
 const contactMethod = hasContactEndpoint ? FORMS.contact.method : "get";
@@ -21,9 +22,9 @@ const contactEnctype = hasContactEndpoint ? FORMS.contact.enctype : undefined;
 
     <header class="mt-6">
       <div class="text-xs font-medium uppercase tracking-[0.2em] text-primary">Contact</div>
-      <h1 class="mt-2 font-serif text-5xl font-semibold">Say hello.</h1>
+      <h1 class="mt-2 font-serif text-5xl font-semibold">{contact.heading}</h1>
       <p class="mt-4 max-w-xl text-muted-foreground">
-        Notes, corrections, pitches, or just a thought. We read everything and reply to most of it.
+        {contact.intro}
       </p>
     </header>
 
@@ -62,7 +63,7 @@ const contactEnctype = hasContactEndpoint ? FORMS.contact.enctype : undefined;
         </div>
         <div>
           <div class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Pitches</div>
-          <p class="mt-2 text-sm text-muted-foreground">We commission essays from new contributors a few times a year. Send a short paragraph about what you'd like to write.</p>
+          <p class="mt-2 text-sm text-muted-foreground">{contact.pitchesBlurb}</p>
         </div>
       </aside>
     </div>
