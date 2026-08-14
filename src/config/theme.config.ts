@@ -5,13 +5,13 @@ const siteUrl = (
 ).replace(/\/$/, "");
 
 export const SITE = {
-  name: "Quiet Pages",
+  name: "Secure in Christ",
   description:
-    "An independent magazine on writing, design, and the slow web. Published occasionally, read closely.",
+    "An independent Christian magazine on theology and finding rest in Christ.",
   url: siteUrl,
   locale: "en-US",
   language: "en",
-  repositoryUrl: "https://github.com/andreialba/quietpages",
+  repositoryUrl: "https://github.com/jeffrey-agyepong/secureinChrist",
 };
 
 export const NAVIGATION = [
