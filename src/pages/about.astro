@@ -34,7 +34,7 @@ const { Content } = await render(aboutEntry);
         {
           authors.map((author) => (
             <a href={`/authors/${author.slug}`} class="group flex items-start gap-3">
-              <img src={author.avatar} alt="" width="48" height="48" class="h-12 w-12 rounded-full" />
+              <img src={author.avatar} alt="" width="48" height="48" class="h-12 w-12 rounded-full object-cover" />
               <div>
                 <div class="font-serif text-base font-semibold group-hover:text-primary">{author.name}</div>
                 <div class="mt-1 text-sm text-muted-foreground">{author.bio}</div>

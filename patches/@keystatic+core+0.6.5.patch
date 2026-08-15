@@ -1,0 +1,93 @@
+diff --git a/node_modules/@keystatic/core/dist/keystatic-core-api-generic.node.js b/node_modules/@keystatic/core/dist/keystatic-core-api-generic.node.js
+index b4c82e2..b0c7ca8 100644
+--- a/node_modules/@keystatic/core/dist/keystatic-core-api-generic.node.js
++++ b/node_modules/@keystatic/core/dist/keystatic-core-api-generic.node.js
+@@ -190,7 +190,27 @@ async function update(req, config, baseDirectory) {
+         path: filepath
+       }))
+     }));
+-  } catch {
++  } catch (err) {
++    if (err instanceof s.StructError) {
++      return {
++        status: 400,
++        headers: {
++          'content-type': 'application/json'
++        },
++        body: JSON.stringify({
++          error: 'Bad data',
++          path: err.path.join('.'),
++          type: err.type,
++          message: err.message,
++          failures: err.failures().map(f => ({
++            path: f.path,
++            type: f.type,
++            message: f.message,
++            refinement: f.refinement
++          }))
++        })
++      };
++    }
+     return {
+       status: 400,
+       body: 'Bad data'
+diff --git a/node_modules/@keystatic/core/dist/keystatic-core-ui.js b/node_modules/@keystatic/core/dist/keystatic-core-ui.js
+index 634e84f..ddcaf6f 100644
+--- a/node_modules/@keystatic/core/dist/keystatic-core-ui.js
++++ b/node_modules/@keystatic/core/dist/keystatic-core-ui.js
+@@ -193,6 +193,31 @@ import 'partysocket/ws';
+ import 'lib0/encoding.js';
+ import 'react-aria/private/utils/useResizeObserver';
+ 
++// Patched locally (see https://github.com/Thinkmill/keystatic/pull/1546) to fix
++// "Bad data" 400s on save: relative asset references inside content fields get
++// concatenated into wire-format paths like
++// `src/content/blog/{slug}/content/../../assets/blog/x.png`, which the update
++// API rejects outright because it disallows any `..` path segment. This
++// resolves `..`/`.` segments client-side before the path is sent.
++function normalizePosixPath(path) {
++  const isAbsolute = path.startsWith('/');
++  const segments = path.split('/');
++  const result = [];
++  for (const seg of segments) {
++    if (seg === '' || seg === '.') continue;
++    if (seg === '..') {
++      if (result.length > 0 && result[result.length - 1] !== '..') {
++        result.pop();
++      } else if (!isAbsolute) {
++        result.push('..');
++      }
++      continue;
++    }
++    result.push(seg);
++  }
++  return (isAbsolute ? '/' : '') + result.join('/');
++}
++
+ // the collator enables language-sensitive string comparison
+ const collator = new Intl.Collator(undefined, {
+   sensitivity: 'base'
+@@ -2065,9 +2090,13 @@ function useUpsertItem(args) {
+           body: JSON.stringify({
+             additions: additions.map(addition_3 => ({
+               ...addition_3,
++              path: normalizePosixPath(addition_3.path),
+               contents: base64Encode(addition_3.contents)
+             })),
+-            deletions
++            deletions: deletions.map(d => ({
++              ...d,
++              path: normalizePosixPath(d.path)
++            }))
+           })
+         });
+         if (!res.ok) {
+@@ -2191,7 +2220,7 @@ function useDeleteItem(args) {
+           body: JSON.stringify({
+             additions: [],
+             deletions: deletions.map(path_0 => ({
+-              path: path_0
++              path: normalizePosixPath(path_0)
+             }))
+           })
+         });

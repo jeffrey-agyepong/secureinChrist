@@ -115,6 +115,18 @@ const iconClass = isHome
   </div>
 </header>
 
+<script is:inline src="https://www.blueletterbible.org/assets/scripts/blbToolTip/BLB_ScriptTagger-min.js"></script>
+<script is:inline>
+  BLB.Tagger.Translation = "CSB";
+  BLB.Tagger.HyperLinks = "all"; // 'all', 'none', 'hover'
+  BLB.Tagger.HideTranslationAbbrev = false;
+  BLB.Tagger.DarkTheme = true;
+  BLB.Tagger.TargetNewWindow = true;
+  BLB.Tagger.Style = "par"; // 'line' or 'par'
+  BLB.Tagger.NoSearchTagNames = ""; // HTML element list
+  BLB.Tagger.NoSearchClassNames = "noTag doNotTag"; // CSS class list
+</script>
+
 <script>
   const searchToggle = document.querySelector("[data-search-toggle]");
   const searchPanel = document.querySelector("[data-search-panel]");

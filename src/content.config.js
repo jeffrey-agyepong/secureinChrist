@@ -37,8 +37,7 @@ const blog = defineCollection({
           authorUrl: z.string().url(),
           source: z.string().nullish(),
           sourceUrl: z.string().url(),
-        }))
-        .optional()
+        }).optional())
         .transform((v) =>
           v
             ? {
