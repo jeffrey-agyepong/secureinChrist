@@ -30,7 +30,7 @@ const { Content } = await render(aboutEntry);
 
     <section class="mt-12 border-t border-border pt-10">
       <h2 class="font-serif text-2xl font-semibold">Contributors</h2>
-      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">
         {
           authors.map((author) => (
             <a href={`/authors/${author.slug}`} class="group flex items-start gap-3">
