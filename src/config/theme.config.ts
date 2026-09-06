@@ -22,7 +22,7 @@ export const NAVIGATION = [
 ];
 
 export const CONTACT = {
-  email: "info@secureinchrist.org",
+  email: "agyepong99@gmail.com",
 };
 
 export const FORMS = {

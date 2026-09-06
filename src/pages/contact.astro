@@ -25,35 +25,49 @@ const contact = await getContact();
     </header>
 
     <div class="mt-12 grid gap-12 lg:grid-cols-[1fr_240px]">
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-        class="space-y-5"
-      >
-        <input type="hidden" name="form-name" value="contact" />
-        <p class="hidden">
-          <label>
-            Don't fill this out if you're human: <input name="bot-field" />
-          </label>
+      <div>
+        <form
+          id="contact-form"
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="bot-field"
+          class="space-y-5"
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hidden">
+            <label>
+              Don't fill this out if you're human: <input name="bot-field" />
+            </label>
+          </p>
+          <div>
+            <label for="name" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</label>
+            <input id="name" name="name" autocomplete="name" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label for="email" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
+          </div>
+          <div>
+            <label for="message" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</label>
+            <textarea id="message" name="message" required rows="6" class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary"></textarea>
+          </div>
+          <button type="submit" class="rounded-md bg-foreground px-6 py-2.5 text-sm font-medium text-background hover:opacity-90">
+            Send
+          </button>
+        </form>
+
+        <div id="contact-success" class="hidden space-y-2">
+          <p class="text-lg font-medium">Thanks for reaching out.</p>
+          <p class="text-sm text-muted-foreground">
+            We've received your message and read everything that comes in. We'll get back to you soon.
+          </p>
+        </div>
+
+        <p id="contact-error" class="hidden mt-4 text-sm text-red-600">
+          Something went wrong sending your message. Please try emailing {CONTACT.email} directly instead.
         </p>
-        <div>
-          <label for="name" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</label>
-          <input id="name" name="name" autocomplete="name" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
-        </div>
-        <div>
-          <label for="email" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
-          <input id="email" name="email" type="email" autocomplete="email" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
-        </div>
-        <div>
-          <label for="message" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</label>
-          <textarea id="message" name="message" required rows="6" class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary"></textarea>
-        </div>
-        <button type="submit" class="rounded-md bg-foreground px-6 py-2.5 text-sm font-medium text-background hover:opacity-90">
-          Send
-        </button>
-      </form>
+      </div>
 
       <aside class="space-y-6 border-l border-border pl-8 lg:block">
         <div>
@@ -66,4 +80,35 @@ const contact = await getContact();
       </aside>
     </div>
   </div>
+
+  <script>
+    const form = document.getElementById("contact-form");
+    const success = document.getElementById("contact-success");
+    const error = document.getElementById("contact-error");
+
+    if (form) {
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (error) error.classList.add("hidden");
+
+        try {
+          const body = new URLSearchParams();
+          new FormData(form).forEach((value, key) => body.append(key, value));
+
+          const response = await fetch(form.getAttribute("action") || window.location.pathname, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: body.toString(),
+          });
+
+          if (!response.ok) throw new Error(String(response.status));
+
+          form.classList.add("hidden");
+          if (success) success.classList.remove("hidden");
+        } catch {
+          if (error) error.classList.remove("hidden");
+        }
+      });
+    }
+  </script>
 </BaseLayout>
