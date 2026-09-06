@@ -25,7 +25,7 @@ const contact = await getContact();
     </header>
 
     <div class="mt-12 grid gap-12 lg:grid-cols-[1fr_240px]">
-      <div>
+      <div class="rounded-xl border border-border bg-card p-6 sm:p-8">
         <form
           id="contact-form"
           name="contact"
@@ -42,29 +42,54 @@ const contact = await getContact();
           </p>
           <div>
             <label for="name" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Name</label>
-            <input id="name" name="name" autocomplete="name" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
+            <input
+              id="name"
+              name="name"
+              autocomplete="name"
+              required
+              class="mt-2 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-base outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
+            />
           </div>
           <div>
             <label for="email" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</label>
-            <input id="email" name="email" type="email" autocomplete="email" required class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary" />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="mt-2 w-full rounded-lg border border-input bg-background px-3.5 py-2.5 text-base outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
+            />
           </div>
           <div>
             <label for="message" class="text-xs font-medium uppercase tracking-wider text-muted-foreground">Message</label>
-            <textarea id="message" name="message" required rows="6" class="mt-2 w-full border-0 border-b border-input bg-transparent py-2 text-base outline-none focus:border-primary"></textarea>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows="6"
+              class="mt-2 w-full resize-y rounded-lg border border-input bg-background px-3.5 py-2.5 text-base outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/15"
+            ></textarea>
           </div>
-          <button type="submit" class="rounded-md bg-foreground px-6 py-2.5 text-sm font-medium text-background hover:opacity-90">
-            Send
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-foreground px-6 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+          >
+            Send message
           </button>
         </form>
 
-        <div id="contact-success" class="hidden space-y-2">
-          <p class="text-lg font-medium">Thanks for reaching out.</p>
-          <p class="text-sm text-muted-foreground">
-            We've received your message and read everything that comes in. We'll get back to you soon.
-          </p>
+        <div id="contact-success" class="hidden items-start gap-3 rounded-lg border border-primary/25 bg-primary/5 p-4">
+          <Icon name="check" class="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <div>
+            <p class="text-sm font-medium">Thanks for reaching out.</p>
+            <p class="mt-1 text-sm text-muted-foreground">
+              We've received your message and read everything that comes in. We'll get back to you soon.
+            </p>
+          </div>
         </div>
 
-        <p id="contact-error" class="hidden mt-4 text-sm text-red-600">
+        <p id="contact-error" class="hidden rounded-lg border border-destructive/25 bg-destructive/5 p-4 text-sm text-destructive">
           Something went wrong sending your message. Please try emailing {CONTACT.email} directly instead.
         </p>
       </div>
@@ -85,11 +110,16 @@ const contact = await getContact();
     const form = document.getElementById("contact-form");
     const success = document.getElementById("contact-success");
     const error = document.getElementById("contact-error");
+    const submitButton = form?.querySelector('button[type="submit"]');
 
     if (form) {
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
-        if (error) error.classList.add("hidden");
+        error?.classList.add("hidden");
+        if (submitButton) {
+          submitButton.disabled = true;
+          submitButton.textContent = "Sending…";
+        }
 
         try {
           const body = new URLSearchParams();
@@ -104,9 +134,14 @@ const contact = await getContact();
           if (!response.ok) throw new Error(String(response.status));
 
           form.classList.add("hidden");
-          if (success) success.classList.remove("hidden");
+          success?.classList.remove("hidden");
+          success?.classList.add("flex");
         } catch {
-          if (error) error.classList.remove("hidden");
+          error?.classList.remove("hidden");
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Send message";
+          }
         }
       });
     }
