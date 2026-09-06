@@ -6,7 +6,7 @@ import keystatic from "@keystatic/astro";
 import rehypeExternalLinks from "rehype-external-links";
 
 const site =
-  process.env.SITE_URL || process.env.PUBLIC_SITE_URL || "https://quietpages-eta.vercel.app";
+  process.env.SITE_URL || process.env.PUBLIC_SITE_URL || "https://secureinchrist.org";
 
 // The Keystatic admin UI needs on-demand server routes, which requires an
 // adapter this static site doesn't have. It's only needed while editing

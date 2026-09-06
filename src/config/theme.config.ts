@@ -1,7 +1,7 @@
 const siteUrl = (
   import.meta.env.SITE_URL ||
   import.meta.env.PUBLIC_SITE_URL ||
-  "https://quietpages-eta.vercel.app"
+  "https://secureinchrist.org"
 ).replace(/\/$/, "");
 
 export const SITE = {
@@ -22,17 +22,10 @@ export const NAVIGATION = [
 ];
 
 export const CONTACT = {
-  email: "hello@example.com",
-  socialHandle: "@quietpages",
-  socialUrl: "https://x.com/quietpages",
+  email: "info@secureinchrist.org",
 };
 
 export const FORMS = {
-  contact: {
-    action: "",
-    method: "post",
-    enctype: "application/x-www-form-urlencoded",
-  },
   newsletter: {
     action: "",
     method: "post",
@@ -42,7 +35,6 @@ export const FORMS = {
 
 export const SOCIAL_LINKS = [
   { href: "/rss.xml", label: "RSS feed", icon: "rss" },
-  { href: CONTACT.socialUrl, label: `${SITE.name} on X`, icon: "twitter" },
   { href: SITE.repositoryUrl, label: `${SITE.name} on GitHub`, icon: "github" },
   { href: `mailto:${CONTACT.email}`, label: "Email", icon: "mail" },
 ];
