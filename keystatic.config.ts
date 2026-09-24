@@ -2,10 +2,7 @@ import { config, fields, collection, singleton } from "@keystatic/core";
 
 export default config({
   storage: {
-    kind: "cloud",
-  },
-  cloud: {
-    project: "j-a-web-design/secureinchrist",
+    kind: "local",
   },
   collections: {
     blog: collection({
