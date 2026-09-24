@@ -89,19 +89,19 @@ const jsonLd = {
       ]}
     />
 
-    <header class="mx-auto mt-8 max-w-3xl text-center">
+    <header class="mx-auto mt-8 max-w-6xl">
       {
         category && (
-          <a href={`/categories/${category.slug}`} class="text-xs font-medium uppercase tracking-[0.2em] text-primary hover:underline">
+          <a href={`/categories/${category.slug}`} class="text-xs font-medium uppercase tracking-[0.2em] text-primary text-center hover:underline">
             {category.name}
           </a>
         )
       }
-      <h1 class="mt-4 font-serif text-4xl font-semibold leading-[1.1] sm:text-5xl">
+      <h1 class="mt-4 font-serif text-3xl text-left font-semibold leading-[1.1] sm:text-4xl">
         {post.title}
       </h1>
-      <p class="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">{post.excerpt}</p>
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
+      <p class="mx-auto mt-5 text-lg text-muted-foreground">{post.excerpt}</p>
+      <div class="mt-6 flex flex-wrap items-center justify-start gap-x-4 gap-y-2 text-sm text-muted-foreground">
         {
           author && (
             <a href={`/authors/${author.slug}`} class="flex items-center gap-2 hover:text-foreground">
@@ -120,21 +120,21 @@ const jsonLd = {
 
     {
       post.thumbnail && (
-        <figure class="mx-auto mt-10 max-w-4xl">
-          <div class="overflow-hidden rounded-md bg-muted">
+        <figure class="mx-auto mt-10 max-w-6xl">
+          <div class="flex max-h-140 items-center justify-center overflow-hidden rounded-md bg-muted">
             <Image
               src={post.thumbnail}
               alt={post.thumbnailAlt || post.imageCredit?.caption || ""}
-              class="w-full"
+              class="max-h-140 w-auto max-w-full object-contain"
               widths={[640, 960, 1280, 1600]}
-              sizes="(min-width: 1024px) 896px, calc(100vw - 40px)"
+              sizes="(min-width: 1024px) 1152px, calc(100vw - 40px)"
               format="webp"
               quality={78}
             />
           </div>
           {
             post.imageCredit && (
-              <figcaption class="mx-auto mt-3 max-w-2xl text-center text-xs leading-relaxed text-muted-foreground">
+              <figcaption class="mx-auto mt-3 max-w-6xl text-center text-xs leading-relaxed text-muted-foreground">
                 {post.imageCredit.caption && <span>{post.imageCredit.caption} </span>}
                 <span>
                   Photo by{" "}
@@ -165,7 +165,7 @@ const jsonLd = {
     }
 
     <div class="mt-12 grid gap-12 lg:grid-cols-[1fr_220px]">
-      <div class="mx-auto w-full min-w-0 max-w-2xl">
+      <div class="mx-auto w-full min-w-0 max-w-6xl">
         <div class="prose-article">
           <Content />
         </div>
@@ -232,7 +232,7 @@ const jsonLd = {
         <div class="mt-12 rounded-md border border-dashed border-border p-8 text-center">
           <Icon name="message" class="mx-auto h-5 w-5 text-muted-foreground" />
           <div class="mt-2 font-serif text-lg">Comments</div>
-          <p class="mt-1 text-sm text-muted-foreground">Hook this up to your favourite commenting platform &mdash; Giscus, Disqus, or your own.</p>
+          <p class="mt-1 text-sm text-muted-foreground">Hook this up to your favourite commenting platform: Giscus, Disqus, or your own.</p>
         </div>
       </div>
 
