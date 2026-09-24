@@ -8,9 +8,10 @@ import rehypeExternalLinks from "rehype-external-links";
 const site =
   process.env.SITE_URL || process.env.PUBLIC_SITE_URL || "https://secureinchrist.org";
 
-// The Keystatic admin UI needs on-demand server routes, which requires an
-// adapter this static site doesn't have. It's only needed while editing
-// locally (`npm run dev`), so keep it out of `astro build`/`astro preview`.
+// @keystatic/astro always injects its admin routes as on-demand (SSR) pages,
+// even with Keystatic Cloud storage — so they still require a server adapter
+// this static site doesn't have. Keep them out of `astro build`/`astro preview`
+// until a real adapter is added (see conversation).
 const isDev = process.argv[2] === "dev";
 
 export default defineConfig({
